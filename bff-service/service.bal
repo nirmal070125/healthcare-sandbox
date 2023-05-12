@@ -1,17 +1,28 @@
 import ballerina/http;
 
-# A service representing a network-accessible API
-# bound to port `9090`.
+configurable string tokenUrl = ?;
+configurable string clientId = ?;
+configurable string clientSecret = ?;
+configurable string v2tofhirAPIUrl = ?;
+
+final http:Client v2tofhirClient = check new (v2tofhirAPIUrl,
+    auth = {
+        tokenUrl: tokenUrl,
+        clientId: clientId,
+        clientSecret: clientSecret
+    }
+    );
+
 service / on new http:Listener(9090) {
 
-    # A resource for generating greetings
-    # + name - the input string name
-    # + return - string name with hello message or error
-    resource function get greeting(string name) returns string|error {
-        // Send a response back to the caller.
-        if name is "" {
-            return error("name should not be empty!");
-        }
-        return "Hello, " + name;
+    # + return - a json
+    # TODO: Change v2tofhir/transform to transform in the v2tofhir service
+    resource function post v2tofhir/transform(http:RequestContext ctx, http:Request request) returns json|error {
+
+        // Get the payload from the request
+        string textPayload = check request.getTextPayload();
+        // Invoke the v2tofhir service
+        json result = check v2tofhirClient->post("/v2tofhir/transform", textPayload);
+        return result;
     }
 }
