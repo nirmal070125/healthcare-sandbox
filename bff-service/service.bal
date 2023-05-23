@@ -52,6 +52,7 @@ service / on new http:Listener(9090) {
 
         // Invoke the ccdatofhir service
         json result = check patientfhirClient->post("/fhir/r4/Patient", jsonPayload, mediaType = r4:FHIR_MIME_TYPE_JSON);
+
         return result;
     }
 
