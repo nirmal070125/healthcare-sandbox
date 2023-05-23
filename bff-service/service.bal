@@ -5,6 +5,7 @@ configurable string clientId = ?;
 configurable string clientSecret = ?;
 configurable string v2tofhirAPIUrl = ?;
 configurable string ccdatofhirAPIUrl = ?;
+configurable string patientfhirAPIUrl = ?;
 
 http:ClientConfiguration config = {
     auth: {
@@ -17,6 +18,8 @@ http:ClientConfiguration config = {
 final http:Client v2tofhirClient = check new (v2tofhirAPIUrl, config);
 
 final http:Client ccdatofhirClient = check new (ccdatofhirAPIUrl, config);
+
+final http:Client patientfhirClient = check new (patientfhirAPIUrl, config);
 
 service / on new http:Listener(9090) {
 
@@ -38,6 +41,25 @@ service / on new http:Listener(9090) {
         string textPayload = check request.getTextPayload();
         // Invoke the ccdatofhir service
         json result = check ccdatofhirClient->post("/ccdatofhir/transform", textPayload);
+        return result;
+    }
+
+    resource function post fhir/r4/patient(http:RequestContext ctx, http:Request request) returns json|error {
+
+        // Get the payload from the request
+        json jsonPayload = check request.getJsonPayload();
+
+        map<string|string[]>? headers = {"Content-Type": ["application/fhir+json"]};
+
+        // Invoke the ccdatofhir service
+        json result = check patientfhirClient->post("/fhir/r4/Patient", jsonPayload, headers);
+        return result;
+    }
+
+    resource function get fhir/r4/patient(http:RequestContext ctx, http:Request request) returns json|error {
+
+        // Invoke the ccdatofhir service
+        json result = check patientfhirClient->get("/fhir/r4/Patient");
         return result;
     }
 }
