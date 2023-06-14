@@ -72,7 +72,7 @@ service / on new http:Listener(9090) {
         string queryString = "";
         foreach var [key, value] in queryParams.entries() {
             foreach var v in value {
-                queryString = string `${queryString} ${key} = ${v} &`;
+                queryString = string `${queryString}${key}=${v}&`;
             }
         }
 
@@ -108,7 +108,7 @@ service / on new http:Listener(9090) {
         string queryString = "";
         foreach var [key, value] in queryParams.entries() {
             foreach var v in value {
-                queryString = string `${queryString} ${key} = ${v} &`;
+                queryString = string `${queryString}${key}=${v}&`;
             }
         }
 
@@ -144,7 +144,7 @@ service / on new http:Listener(9090) {
         string queryString = "";
         foreach var [key, value] in queryParams.entries() {
             foreach var v in value {
-                queryString = string `${queryString} ${key} = ${v} &`;
+                queryString = string `${queryString}${key}=${v}&`;
             }
         }
 
@@ -180,7 +180,7 @@ service / on new http:Listener(9090) {
         string queryString = "";
         foreach var [key, value] in queryParams.entries() {
             foreach var v in value {
-                queryString = string `${queryString} ${key} = ${v} &`;
+                queryString = string `${queryString}${key}=${v}&`;
             }
         }
 
@@ -216,7 +216,7 @@ service / on new http:Listener(9090) {
         string queryString = "";
         foreach var [key, value] in queryParams.entries() {
             foreach var v in value {
-                queryString = string `${queryString} ${key} = ${v} &`;
+                queryString = string `${queryString}${key}=${v}&`;
             }
         }
 
