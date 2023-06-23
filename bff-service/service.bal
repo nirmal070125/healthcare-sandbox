@@ -6,6 +6,7 @@ configurable string clientId = ?;
 configurable string clientSecret = ?;
 configurable string v2tofhirAPIUrl = ?;
 configurable string ccdatofhirAPIUrl = ?;
+configurable string metadatafhirAPIUrl = ?;
 configurable string patientfhirAPIUrl = ?;
 configurable string encounterfhirAPIUrl = ?;
 configurable string practitionerfhirAPIUrl = ?;
@@ -23,6 +24,8 @@ http:ClientConfiguration config = {
 final http:Client v2tofhirClient = check new (v2tofhirAPIUrl, config);
 
 final http:Client ccdatofhirClient = check new (ccdatofhirAPIUrl, config);
+
+final http:Client metadatafhirClient = check new (metadatafhirAPIUrl, config);
 
 final http:Client patientfhirClient = check new (patientfhirAPIUrl, config);
 
@@ -54,6 +57,13 @@ service / on new http:Listener(9090) {
         string textPayload = check request.getTextPayload();
         // Invoke the ccdatofhir service
         json result = check ccdatofhirClient->post("/ccdatofhir/transform", textPayload);
+        return result;
+    }
+
+    resource function get fhir/r4/metadata(http:RequestContext ctx, http:Request request) returns json|error {
+
+        // Invoke the metadatafhir service
+        json result = check metadatafhirClient->get("/fhir/r4/metadata");
         return result;
     }
 
